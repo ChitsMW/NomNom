@@ -1,7 +1,4 @@
-# NomNom
-Breastfeeding tracking app for nursing mothers developed in React.
-
-# Breastfeeding-tracker
+# NomNom Breastfeeding-tracker
 
 ## Purpose:
 To create an app that tracks breast feeding sessions for nursing mothers.

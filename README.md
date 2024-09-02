@@ -3,7 +3,7 @@
 ## Purpose:
 To create an app that tracks breast feeding sessions for nursing mothers.
 ## Tech Stack:
-JavaScript, HTML, CSS, Vue.
+JavaScript, HTML, CSS, React, Bootstrap.
 ## Team:
 Solo project
 ## Description:

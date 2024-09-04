@@ -7,7 +7,7 @@ JavaScript, HTML, CSS, React, Bootstrap.
 ## Team:
 Solo project
 ## Description:
-I used started code to build this app. It allows the user to either manually input the nursing session, or turn on a real-time timer. Sessions are stired in a database and can be retrieved through a history. 
+I used starter code to build this app. It allows the user to either manually input the nursing session, or turn on a real-time timer. Sessions are stored in a database and can be retrieved through a history. 
 ## Fun Fact:
 
 ## Still TODO:

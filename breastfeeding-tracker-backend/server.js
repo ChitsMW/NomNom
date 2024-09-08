@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const Session = require('./models/Session'); // Import the Session model
 require('dotenv').config();
 
 const app = express();
@@ -11,9 +12,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   serverSelectionTimeoutMS: 5000
 })
 .then(() => console.log('Connected to MongoDB'))
@@ -22,6 +22,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   process.exit(1);
 });
 
+// Root route
 app.get('/', (req, res) => {
   res.send(`
     <!DOCTYPE html>
@@ -39,6 +40,50 @@ app.get('/', (req, res) => {
   `);
 });
 
+// Route to fetch all sessions, with optional filtering by search term
+app.get('/sessions', async (req, res) => {
+  const { searchTerm } = req.query;
+  let query = {};
+
+  if (searchTerm) {
+    query = {
+      $or: [
+        { date: { $regex: searchTerm, $options: 'i' } },
+        { time: { $regex: searchTerm, $options: 'i' } },
+        { notes: { $regex: searchTerm, $options: 'i' } }
+      ]
+    };
+  }
+
+  try {
+    const sessions = await Session.find(query);
+    res.json(sessions);
+  } catch (err) {
+    console.error('Error fetching sessions:', err);
+    res.status(500).json({ error: 'Failed to fetch sessions' });
+  }
+});
+
+// Route to add a new session
+app.post('/sessions', async (req, res) => {
+  const { date, time, notes } = req.body;
+
+  if (!date || !time) {
+    return res.status(400).json({ error: 'Date and time are required' });
+  }
+
+  const newSession = new Session({ date, time, notes });
+
+  try {
+    await newSession.save();
+    res.status(201).json(newSession);
+  } catch (err) {
+    console.error('Error saving session:', err);
+    res.status(500).json({ error: 'Failed to save session' });
+  }
+});
+
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
